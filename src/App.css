@@ -1,0 +1,162 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.app {
+  background: #0f0f0f;
+  min-height: 100vh;
+}
+
+.navbar {
+  background: #0f0f0f !important;
+  border-bottom: 1px solid #272727;
+}
+
+.logo {
+  color: white;
+  font-weight: bold !important;
+  margin-left: 10px !important;
+  white-space: nowrap;
+}
+
+.searchBox {
+  width: 45%;
+  margin: 0 auto;
+  background: #121212;
+  border: 1px solid #303030;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  padding-left: 18px;
+}
+
+.searchInput {
+  color: white !important;
+  flex: 1;
+}
+
+.searchBox svg {
+  color: white;
+}
+
+.navIcons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  background: #ef4444 !important;
+}
+
+.layout {
+  display: flex;
+  padding-top: 64px;
+}
+
+.sidebar {
+  width: 230px;
+  min-height: calc(100vh - 64px);
+  background: #0f0f0f;
+  border-right: 1px solid #272727;
+  padding: 18px 10px;
+  position: fixed;
+  top: 64px;
+  left: 0;
+}
+
+.sidebar button {
+  color: white;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  text-transform: none;
+  font-size: 15px;
+}
+
+.sidebar button:hover {
+  background: #272727;
+}
+
+.mainContent {
+  margin-left: 230px;
+  padding: 25px;
+  width: calc(100% - 230px);
+}
+
+.categories {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.chip {
+  font-weight: bold;
+}
+
+.videoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+.videoCard {
+  background: #181818 !important;
+  color: white !important;
+  border-radius: 14px !important;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.videoCard:hover {
+  transform: translateY(-6px);
+}
+
+.videoTitle {
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  margin-bottom: 8px !important;
+}
+
+@media (max-width: 850px) {
+  .sidebar {
+    display: none;
+  }
+
+  .mainContent {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .searchBox {
+    width: 60%;
+  }
+}
+
+@media (max-width: 600px) {
+  .logo {
+    font-size: 15px !important;
+  }
+
+  .searchBox {
+    width: 100%;
+    margin: 12px 0;
+  }
+
+  .navIcons {
+    display: none;
+  }
+
+  .navbar .MuiToolbar-root {
+    flex-wrap: wrap;
+  }
+
+  .layout {
+    padding-top: 115px;
+  }
+}
