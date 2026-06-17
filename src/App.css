@@ -159,4 +159,41 @@
   .layout {
     padding-top: 115px;
   }
+  .playerSection {
+  background: #181818;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+}
+
+.playerSection iframe {
+  width: 100%;
+  height: 430px;
+  border: none;
+  border-radius: 14px;
+}
+
+.playerSection h2 {
+  color: white;
+  margin-top: 15px;
+}
+
+.playerSection p {
+  color: #aaa;
+  margin-top: 8px;
+}
+
+.videoCard {
+  cursor: pointer;
+}
+
+.noResult {
+  color: white;
+}
+
+@media (max-width: 600px) {
+  .playerSection iframe {
+    height: 240px;
+  }
+}
 }

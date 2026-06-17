@@ -13,6 +13,7 @@ import {
   CardContent,
   Chip,
 } from "@mui/material";
+
 import {
   Menu,
   Search,
@@ -24,89 +25,92 @@ import {
   History,
   ThumbUp,
 } from "@mui/icons-material";
+
 import "./App.css";
 
 const videos = [
   {
-    title: "React JS Crash Course for Beginners",
-    channel: "Code Academy",
-    views: "1.2M views",
-    time: "2 days ago",
+    title: "React JS Full Course",
+    channel: "Programming with Mosh",
+    views: "3.2M views",
+    time: "1 year ago",
     category: "React",
-    thumbnail:
-      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
+    videoId: "SqcY0GlETPk",
+    thumbnail: "https://img.youtube.com/vi/SqcY0GlETPk/hqdefault.jpg",
   },
   {
-    title: "Build a Modern Website with JavaScript",
-    channel: "Web Dev Pro",
-    views: "850K views",
-    time: "1 week ago",
+    title: "JavaScript Tutorial for Beginners",
+    channel: "Programming with Mosh",
+    views: "8.5M views",
+    time: "3 years ago",
     category: "JavaScript",
-    thumbnail:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
+    videoId: "W6NZfCO5SIk",
+    thumbnail: "https://img.youtube.com/vi/W6NZfCO5SIk/hqdefault.jpg",
   },
   {
-    title: "Material UI Tutorial for React Apps",
-    channel: "UI Master",
-    views: "430K views",
-    time: "4 days ago",
+    title: "Material UI React Tutorial",
+    channel: "Codevolution",
+    views: "700K views",
+    time: "2 years ago",
     category: "UI",
-    thumbnail:
-      "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=800&q=80",
+    videoId: "vyJU9efvUtQ",
+    thumbnail: "https://img.youtube.com/vi/vyJU9efvUtQ/hqdefault.jpg",
   },
   {
-    title: "Learn Python Programming in One Video",
-    channel: "Python Hub",
-    views: "2.1M views",
-    time: "3 weeks ago",
+    title: "Python Full Course",
+    channel: "freeCodeCamp",
+    views: "40M views",
+    time: "4 years ago",
     category: "Python",
-    thumbnail:
-      "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=800&q=80",
+    videoId: "rfscVS0vtbw",
+    thumbnail: "https://img.youtube.com/vi/rfscVS0vtbw/hqdefault.jpg",
   },
   {
-    title: "Responsive Web Design Complete Guide",
-    channel: "Frontend World",
-    views: "670K views",
-    time: "6 days ago",
+    title: "CSS Flexbox Tutorial",
+    channel: "Web Dev Simplified",
+    views: "1M views",
+    time: "2 years ago",
     category: "CSS",
-    thumbnail:
-      "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=800&q=80",
+    videoId: "fYq5PXgSsbE",
+    thumbnail: "https://img.youtube.com/vi/fYq5PXgSsbE/hqdefault.jpg",
   },
   {
-    title: "GitHub Pages Deployment Tutorial",
-    channel: "Deploy Easy",
-    views: "390K views",
-    time: "1 month ago",
+    title: "Git and GitHub Tutorial",
+    channel: "freeCodeCamp",
+    views: "6M views",
+    time: "3 years ago",
     category: "GitHub",
-    thumbnail:
-      "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=800&q=80",
+    videoId: "RGOj5yH7evk",
+    thumbnail: "https://img.youtube.com/vi/RGOj5yH7evk/hqdefault.jpg",
   },
 ];
 
-const categories = [
-  "All",
-  "React",
-  "JavaScript",
-  "UI",
-  "Python",
-  "CSS",
-  "GitHub",
-];
+const categories = ["All", "React", "JavaScript", "UI", "Python", "CSS", "GitHub"];
 
 function App() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedVideo, setSelectedVideo] = useState(videos[0]);
 
   const filteredVideos = videos.filter((video) => {
-    const matchesCategory =
+    const categoryMatch =
       selectedCategory === "All" || video.category === selectedCategory;
 
-    const matchesSearch =
+    const searchMatch =
       video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      video.channel.toLowerCase().includes(searchTerm.toLowerCase());
+      video.channel.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      video.category.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchesCategory && matchesSearch;
+    return categoryMatch && searchMatch;
   });
+
+  function handleSearch(e) {
+    e.preventDefault();
+
+    if (filteredVideos.length > 0) {
+      setSelectedVideo(filteredVideos[0]);
+    }
+  }
 
   return (
     <Box className="app">
@@ -120,17 +124,17 @@ function App() {
             ▶ YouTube Clone
           </Typography>
 
-          <Box className="searchBox">
+          <form className="searchBox" onSubmit={handleSearch}>
             <InputBase
               placeholder="Search videos..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="searchInput"
             />
-            <IconButton>
+            <IconButton type="submit">
               <Search />
             </IconButton>
-          </Box>
+          </form>
 
           <Box className="navIcons">
             <IconButton color="inherit">
@@ -154,6 +158,19 @@ function App() {
         </Box>
 
         <Box className="mainContent">
+          <Box className="playerSection">
+            <iframe
+              src={`https://www.youtube.com/embed/${selectedVideo.videoId}`}
+              title={selectedVideo.title}
+              allowFullScreen
+            ></iframe>
+
+            <h2>{selectedVideo.title}</h2>
+            <p>
+              {selectedVideo.channel} • {selectedVideo.views} • {selectedVideo.time}
+            </p>
+          </Box>
+
           <Box className="categories">
             {categories.map((category) => (
               <Chip
@@ -167,27 +184,35 @@ function App() {
           </Box>
 
           <Box className="videoGrid">
-            {filteredVideos.map((video, index) => (
-              <Card className="videoCard" key={index}>
-                <CardMedia
-                  component="img"
-                  height="180"
-                  image={video.thumbnail}
-                  alt={video.title}
-                />
-                <CardContent>
-                  <Typography variant="h6" className="videoTitle">
-                    {video.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {video.channel}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {video.views} • {video.time}
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
+            {filteredVideos.length === 0 ? (
+              <h2 className="noResult">No videos found</h2>
+            ) : (
+              filteredVideos.map((video, index) => (
+                <Card
+                  className="videoCard"
+                  key={index}
+                  onClick={() => setSelectedVideo(video)}
+                >
+                  <CardMedia
+                    component="img"
+                    height="180"
+                    image={video.thumbnail}
+                    alt={video.title}
+                  />
+                  <CardContent>
+                    <Typography variant="h6" className="videoTitle">
+                      {video.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {video.channel}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {video.views} • {video.time}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </Box>
         </Box>
       </Box>
