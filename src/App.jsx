@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { videos } from "./data/videos";
 import {
   Box,
   AppBar,
@@ -12,6 +13,7 @@ import {
   CardMedia,
   CardContent,
   Chip,
+  Divider,
 } from "@mui/material";
 
 import {
@@ -24,114 +26,100 @@ import {
   Subscriptions,
   History,
   ThumbUp,
+  PlayCircle,
+  SportsSoccer,
+  MusicNote,
+  Movie,
+  SportsEsports,
 } from "@mui/icons-material";
 
 import "./App.css";
 
-const videos = [
-  {
-    title: "React JS Full Course",
-    channel: "Programming with Mosh",
-    views: "3.2M views",
-    time: "1 year ago",
-    category: "React",
-    videoId: "SqcY0GlETPk",
-    thumbnail: "https://img.youtube.com/vi/SqcY0GlETPk/hqdefault.jpg",
-  },
-  {
-    title: "JavaScript Tutorial for Beginners",
-    channel: "Programming with Mosh",
-    views: "8.5M views",
-    time: "3 years ago",
-    category: "JavaScript",
-    videoId: "W6NZfCO5SIk",
-    thumbnail: "https://img.youtube.com/vi/W6NZfCO5SIk/hqdefault.jpg",
-  },
-  {
-    title: "Material UI React Tutorial",
-    channel: "Codevolution",
-    views: "700K views",
-    time: "2 years ago",
-    category: "UI",
-    videoId: "vyJU9efvUtQ",
-    thumbnail: "https://img.youtube.com/vi/vyJU9efvUtQ/hqdefault.jpg",
-  },
-  {
-    title: "Python Full Course",
-    channel: "freeCodeCamp",
-    views: "40M views",
-    time: "4 years ago",
-    category: "Python",
-    videoId: "rfscVS0vtbw",
-    thumbnail: "https://img.youtube.com/vi/rfscVS0vtbw/hqdefault.jpg",
-  },
-  {
-    title: "CSS Flexbox Tutorial",
-    channel: "Web Dev Simplified",
-    views: "1M views",
-    time: "2 years ago",
-    category: "CSS",
-    videoId: "fYq5PXgSsbE",
-    thumbnail: "https://img.youtube.com/vi/fYq5PXgSsbE/hqdefault.jpg",
-  },
-  {
-    title: "Git and GitHub Tutorial",
-    channel: "freeCodeCamp",
-    views: "6M views",
-    time: "3 years ago",
-    category: "GitHub",
-    videoId: "RGOj5yH7evk",
-    thumbnail: "https://img.youtube.com/vi/RGOj5yH7evk/hqdefault.jpg",
-  },
-];
-
-const categories = ["All", "React", "JavaScript", "UI", "Python", "CSS", "GitHub"];
+const categories = ["All", ...new Set(videos.map((video) => video.category))];
 
 function App() {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [activeSearch, setActiveSearch] = useState("");
   const [selectedVideo, setSelectedVideo] = useState(videos[0]);
+  const [liked, setLiked] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
 
-  const filteredVideos = videos.filter((video) => {
-    const categoryMatch =
-      selectedCategory === "All" || video.category === selectedCategory;
+  const filteredVideos = useMemo(() => {
+    return videos.filter((video) => {
+      const matchesCategory =
+        selectedCategory === "All" || video.category === selectedCategory;
 
-    const searchMatch =
-      video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      video.channel.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      video.category.toLowerCase().includes(searchTerm.toLowerCase());
+      const text = `${video.title} ${video.channel} ${video.category}`.toLowerCase();
+      const matchesSearch = text.includes(activeSearch.toLowerCase());
 
-    return categoryMatch && searchMatch;
-  });
+      return matchesCategory && matchesSearch;
+    });
+  }, [selectedCategory, activeSearch]);
 
   function handleSearch(e) {
     e.preventDefault();
+    const value = searchInput.trim();
+    setActiveSearch(value);
+    setSelectedCategory("All");
 
-    if (filteredVideos.length > 0) {
-      setSelectedVideo(filteredVideos[0]);
+    const foundVideo = videos.find((video) => {
+      const text = `${video.title} ${video.channel} ${video.category}`.toLowerCase();
+      return text.includes(value.toLowerCase());
+    });
+
+    if (foundVideo) {
+      setSelectedVideo(foundVideo);
     }
   }
+
+  function chooseCategory(category) {
+    setSelectedCategory(category);
+    setActiveSearch("");
+    setSearchInput("");
+
+    const firstVideo =
+      category === "All"
+        ? videos[0]
+        : videos.find((video) => video.category === category);
+
+    if (firstVideo) {
+      setSelectedVideo(firstVideo);
+    }
+  }
+
+  function playVideo(video) {
+    setSelectedVideo(video);
+    setLiked(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  const recommendedVideos = videos.filter(
+    (video) => video.videoId !== selectedVideo.videoId
+  );
 
   return (
     <Box className="app">
       <AppBar position="fixed" className="navbar">
-        <Toolbar>
-          <IconButton color="inherit">
-            <Menu />
-          </IconButton>
+        <Toolbar className="toolbar">
+          <Box className="leftNav">
+            <IconButton color="inherit">
+              <Menu />
+            </IconButton>
 
-          <Typography variant="h6" className="logo">
-            ▶ YouTube Clone
-          </Typography>
+            <Typography variant="h6" className="logo">
+              <span className="ytIcon">▶</span> YouTube
+            </Typography>
+          </Box>
 
           <form className="searchBox" onSubmit={handleSearch}>
             <InputBase
               placeholder="Search videos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               className="searchInput"
             />
-            <IconButton type="submit">
+            <IconButton type="submit" className="searchBtn">
               <Search />
             </IconButton>
           </form>
@@ -150,25 +138,126 @@ function App() {
 
       <Box className="layout">
         <Box className="sidebar">
-          <Button startIcon={<Home />}>Home</Button>
-          <Button startIcon={<Whatshot />}>Trending</Button>
-          <Button startIcon={<Subscriptions />}>Subscriptions</Button>
-          <Button startIcon={<History />}>History</Button>
-          <Button startIcon={<ThumbUp />}>Liked Videos</Button>
+          <Button startIcon={<Home />} onClick={() => chooseCategory("All")}>
+            Home
+          </Button>
+          <Button startIcon={<Whatshot />} onClick={() => chooseCategory("News")}>
+            Trending
+          </Button>
+          <Button startIcon={<MusicNote />} onClick={() => chooseCategory("Music")}>
+            Music
+          </Button>
+          <Button startIcon={<SportsSoccer />} onClick={() => chooseCategory("Sports")}>
+            Sports
+          </Button>
+          <Button startIcon={<Movie />} onClick={() => chooseCategory("Movies")}>
+            Movies
+          </Button>
+          <Button startIcon={<SportsEsports />} onClick={() => chooseCategory("Gaming")}>
+            Gaming
+          </Button>
+          <Button startIcon={<Subscriptions />} onClick={() => chooseCategory("Education")}>
+            Education
+          </Button>
+          <Button startIcon={<History />} onClick={() => chooseCategory("Travel")}>
+            Travel
+          </Button>
+          <Button startIcon={<ThumbUp />} onClick={() => chooseCategory("Fitness")}>
+            Fitness
+          </Button>
         </Box>
 
         <Box className="mainContent">
-          <Box className="playerSection">
-            <iframe
-              src={`https://www.youtube.com/embed/${selectedVideo.videoId}`}
-              title={selectedVideo.title}
-              allowFullScreen
-            ></iframe>
+          <Box className="watchLayout">
+            <Box className="watchMain">
+              <Box className="playerWrapper">
+                <iframe
+                  src={`https://www.youtube.com/embed/${selectedVideo.videoId}?rel=0`}
+                  title={selectedVideo.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </Box>
 
-            <h2>{selectedVideo.title}</h2>
-            <p>
-              {selectedVideo.channel} • {selectedVideo.views} • {selectedVideo.time}
-            </p>
+              <Typography variant="h5" className="watchTitle">
+                {selectedVideo.title}
+              </Typography>
+
+              <Box className="videoMeta">
+                <span>
+                  {selectedVideo.views} • {selectedVideo.time}
+                </span>
+
+                <Box className="actionButtons">
+                  <Button
+                    startIcon={<ThumbUp />}
+                    onClick={() => setLiked(!liked)}
+                    className={liked ? "activeAction" : ""}
+                  >
+                    {liked ? "Liked" : "Like"}
+                  </Button>
+                  <Button startIcon={<PlayCircle />}>Share</Button>
+                </Box>
+              </Box>
+
+              <Divider className="divider" />
+
+              <Box className="channelBox">
+                <Avatar className="channelAvatar">
+                  {selectedVideo.channel.charAt(0)}
+                </Avatar>
+
+                <Box className="channelInfo">
+                  <Typography className="channelName">
+                    {selectedVideo.channel}
+                  </Typography>
+                  <Typography className="subscribers">
+                    {selectedVideo.subscribers}
+                  </Typography>
+                </Box>
+
+                <Button
+                  className={subscribed ? "subscribedBtn" : "subscribeBtn"}
+                  onClick={() => setSubscribed(!subscribed)}
+                >
+                  {subscribed ? "Subscribed" : "Subscribe"}
+                </Button>
+              </Box>
+
+              <Box className="descriptionBox">
+                <Typography>{selectedVideo.description}</Typography>
+              </Box>
+            </Box>
+
+            <Box className="recommended">
+              <Typography variant="h6" className="sectionTitle">
+                Recommended
+              </Typography>
+
+              {recommendedVideos.map((video) => (
+                <Box
+                  className="recommendedItem"
+                  key={video.videoId}
+                  onClick={() => playVideo(video)}
+                >
+                  <img
+                    src={`https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg`}
+                    alt={video.title}
+                  />
+                  <Box>
+                    <Typography className="recommendedTitle">
+                      {video.title}
+                    </Typography>
+                    <Typography className="recommendedChannel">
+                      {video.channel}
+                    </Typography>
+                    <Typography className="recommendedChannel">
+                      {video.views}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
           </Box>
 
           <Box className="categories">
@@ -176,39 +265,61 @@ function App() {
               <Chip
                 key={category}
                 label={category}
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => chooseCategory(category)}
                 color={selectedCategory === category ? "error" : "default"}
                 className="chip"
               />
             ))}
           </Box>
 
+          <Typography variant="h6" className="sectionTitle">
+            {activeSearch
+              ? `Search results for "${activeSearch}"`
+              : selectedCategory === "All"
+              ? "Explore Videos"
+              : `${selectedCategory} Videos`}
+          </Typography>
+
           <Box className="videoGrid">
             {filteredVideos.length === 0 ? (
-              <h2 className="noResult">No videos found</h2>
+              <Box className="noResult">
+                <Typography variant="h5">No videos found</Typography>
+                <Typography>
+                  Try searching music, sports, movies, gaming, travel, or cooking.
+                </Typography>
+              </Box>
             ) : (
-              filteredVideos.map((video, index) => (
+              filteredVideos.map((video) => (
                 <Card
                   className="videoCard"
-                  key={index}
-                  onClick={() => setSelectedVideo(video)}
+                  key={video.videoId}
+                  onClick={() => playVideo(video)}
                 >
-                  <CardMedia
-                    component="img"
-                    height="180"
-                    image={video.thumbnail}
-                    alt={video.title}
-                  />
-                  <CardContent>
-                    <Typography variant="h6" className="videoTitle">
-                      {video.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {video.channel}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {video.views} • {video.time}
-                    </Typography>
+                  <Box className="thumbWrapper">
+                    <CardMedia
+                      component="img"
+                      image={`https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`}
+                      alt={video.title}
+                    />
+                    <span className="duration">12:45</span>
+                  </Box>
+
+                  <CardContent className="cardContent">
+                    <Avatar className="smallAvatar">
+                      {video.channel.charAt(0)}
+                    </Avatar>
+
+                    <Box>
+                      <Typography className="videoTitle">
+                        {video.title}
+                      </Typography>
+                      <Typography className="videoChannel">
+                        {video.channel}
+                      </Typography>
+                      <Typography className="videoChannel">
+                        {video.views} • {video.time}
+                      </Typography>
+                    </Box>
                   </CardContent>
                 </Card>
               ))
