@@ -15,7 +15,6 @@ import {
   Chip,
   Divider,
 } from "@mui/material";
-
 import {
   Menu,
   Search,
@@ -31,8 +30,9 @@ import {
   MusicNote,
   Movie,
   SportsEsports,
+  TravelExplore,
+  Restaurant,
 } from "@mui/icons-material";
-
 import "./App.css";
 
 const categories = ["All", ...new Set(videos.map((video) => video.category))];
@@ -46,12 +46,15 @@ function App() {
   const [subscribed, setSubscribed] = useState(false);
 
   const filteredVideos = useMemo(() => {
+    const search = activeSearch.toLowerCase();
+
     return videos.filter((video) => {
       const matchesCategory =
         selectedCategory === "All" || video.category === selectedCategory;
 
-      const text = `${video.title} ${video.channel} ${video.category}`.toLowerCase();
-      const matchesSearch = text.includes(activeSearch.toLowerCase());
+      const searchableText = `${video.title} ${video.channel} ${video.category} ${video.description}`.toLowerCase();
+
+      const matchesSearch = searchableText.includes(search);
 
       return matchesCategory && matchesSearch;
     });
@@ -59,13 +62,15 @@ function App() {
 
   function handleSearch(e) {
     e.preventDefault();
-    const value = searchInput.trim();
-    setActiveSearch(value);
+
+    const searchValue = searchInput.trim().toLowerCase();
+
+    setActiveSearch(searchValue);
     setSelectedCategory("All");
 
     const foundVideo = videos.find((video) => {
-      const text = `${video.title} ${video.channel} ${video.category}`.toLowerCase();
-      return text.includes(value.toLowerCase());
+      const searchableText = `${video.title} ${video.channel} ${video.category} ${video.description}`.toLowerCase();
+      return searchableText.includes(searchValue);
     });
 
     if (foundVideo) {
@@ -73,10 +78,17 @@ function App() {
     }
   }
 
+  function clearSearch() {
+    setSearchInput("");
+    setActiveSearch("");
+    setSelectedCategory("All");
+    setSelectedVideo(videos[0]);
+  }
+
   function chooseCategory(category) {
     setSelectedCategory(category);
-    setActiveSearch("");
     setSearchInput("");
+    setActiveSearch("");
 
     const firstVideo =
       category === "All"
@@ -119,9 +131,16 @@ function App() {
               onChange={(e) => setSearchInput(e.target.value)}
               className="searchInput"
             />
-            <IconButton type="submit" className="searchBtn">
+
+            {searchInput && (
+              <button type="button" className="clearBtn" onClick={clearSearch}>
+                ×
+              </button>
+            )}
+
+            <button type="submit" className="searchBtn">
               <Search />
-            </IconButton>
+            </button>
           </form>
 
           <Box className="navIcons">
@@ -141,7 +160,7 @@ function App() {
           <Button startIcon={<Home />} onClick={() => chooseCategory("All")}>
             Home
           </Button>
-          <Button startIcon={<Whatshot />} onClick={() => chooseCategory("News")}>
+          <Button startIcon={<Whatshot />} onClick={() => chooseCategory("Technology")}>
             Trending
           </Button>
           <Button startIcon={<MusicNote />} onClick={() => chooseCategory("Music")}>
@@ -156,14 +175,17 @@ function App() {
           <Button startIcon={<SportsEsports />} onClick={() => chooseCategory("Gaming")}>
             Gaming
           </Button>
+          <Button startIcon={<TravelExplore />} onClick={() => chooseCategory("Travel")}>
+            Travel
+          </Button>
+          <Button startIcon={<Restaurant />} onClick={() => chooseCategory("Cooking")}>
+            Cooking
+          </Button>
           <Button startIcon={<Subscriptions />} onClick={() => chooseCategory("Education")}>
             Education
           </Button>
-          <Button startIcon={<History />} onClick={() => chooseCategory("Travel")}>
-            Travel
-          </Button>
-          <Button startIcon={<ThumbUp />} onClick={() => chooseCategory("Fitness")}>
-            Fitness
+          <Button startIcon={<History />} onClick={() => chooseCategory("Programming")}>
+            History
           </Button>
         </Box>
 
@@ -234,7 +256,7 @@ function App() {
                 Recommended
               </Typography>
 
-              {recommendedVideos.map((video) => (
+              {recommendedVideos.slice(0, 8).map((video) => (
                 <Box
                   className="recommendedItem"
                   key={video.videoId}
@@ -252,7 +274,7 @@ function App() {
                       {video.channel}
                     </Typography>
                     <Typography className="recommendedChannel">
-                      {video.views}
+                      {video.views} • {video.time}
                     </Typography>
                   </Box>
                 </Box>
@@ -285,7 +307,7 @@ function App() {
               <Box className="noResult">
                 <Typography variant="h5">No videos found</Typography>
                 <Typography>
-                  Try searching music, sports, movies, gaming, travel, or cooking.
+                  Try searching music, sports, movies, gaming, travel, cooking, or programming.
                 </Typography>
               </Box>
             ) : (
@@ -301,7 +323,7 @@ function App() {
                       image={`https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`}
                       alt={video.title}
                     />
-                    <span className="duration">12:45</span>
+                    <span className="duration">{video.duration}</span>
                   </Box>
 
                   <CardContent className="cardContent">
