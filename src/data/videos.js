@@ -1,5 +1,6 @@
 export const videos = [
   {
+    id: "1",
     title: "Relaxing Piano Music for Study and Sleep",
     channel: "Soothing Relaxation",
     views: "20M views",
@@ -8,9 +9,10 @@ export const videos = [
     videoId: "1ZYbU82GVz4",
     duration: "3:01:22",
     subscribers: "11M subscribers",
-    description: "Relaxing piano music for studying, sleeping, and calming your mind.",
+    description: "Relaxing piano music for studying, sleeping, and calming your mind."
   },
   {
+    id: "2",
     title: "Amazing Football Skills and Goals",
     channel: "Football Highlights",
     views: "5.7M views",
@@ -19,9 +21,10 @@ export const videos = [
     videoId: "qFLhGq0060w",
     duration: "10:24",
     subscribers: "2M subscribers",
-    description: "Amazing football skills, goals, and tricks from top football players.",
+    description: "Amazing football skills, goals, and tricks from top football players."
   },
   {
+    id: "3",
     title: "Avengers Endgame Official Trailer",
     channel: "Marvel Entertainment",
     views: "160M views",
@@ -30,9 +33,10 @@ export const videos = [
     videoId: "TcMBFSGVi1c",
     duration: "2:26",
     subscribers: "20M subscribers",
-    description: "Official cinematic trailer experience for movie fans.",
+    description: "Official cinematic trailer experience for movie fans."
   },
   {
+    id: "4",
     title: "Minecraft Survival Gameplay",
     channel: "Gaming World",
     views: "9.4M views",
@@ -41,9 +45,10 @@ export const videos = [
     videoId: "MmB9b5njVbA",
     duration: "15:10",
     subscribers: "5M subscribers",
-    description: "Minecraft survival gameplay and creative building adventure.",
+    description: "Minecraft survival gameplay and creative building adventure."
   },
   {
+    id: "5",
     title: "Beautiful Places to Visit Around the World",
     channel: "Travel Guide",
     views: "3.8M views",
@@ -52,9 +57,10 @@ export const videos = [
     videoId: "Scxs7L0vhZ4",
     duration: "4:12",
     subscribers: "1.8M subscribers",
-    description: "Explore beautiful travel destinations around the world.",
+    description: "Explore beautiful travel destinations around the world."
   },
   {
+    id: "6",
     title: "Easy Homemade Pizza Recipe",
     channel: "Cooking Studio",
     views: "2.1M views",
@@ -63,9 +69,10 @@ export const videos = [
     videoId: "sv3TXMSv6Lw",
     duration: "8:41",
     subscribers: "900K subscribers",
-    description: "Learn how to make delicious homemade pizza with simple ingredients.",
+    description: "Learn how to make delicious homemade pizza with simple ingredients."
   },
   {
+    id: "7",
     title: "10 Minute Home Workout",
     channel: "Fitness Coach",
     views: "6.3M views",
@@ -74,9 +81,10 @@ export const videos = [
     videoId: "UItWltVZZmE",
     duration: "10:00",
     subscribers: "3M subscribers",
-    description: "A quick home workout routine for strength and fitness.",
+    description: "A quick home workout routine for strength and fitness."
   },
   {
+    id: "8",
     title: "How the Solar System Works",
     channel: "Science Channel",
     views: "4.9M views",
@@ -85,9 +93,10 @@ export const videos = [
     videoId: "libKVRa01L8",
     duration: "11:18",
     subscribers: "2.5M subscribers",
-    description: "Understand planets, orbits, stars, and our solar system.",
+    description: "Understand planets, orbits, stars, and our solar system."
   },
   {
+    id: "9",
     title: "React JS Full Course for Beginners",
     channel: "Programming with Mosh",
     views: "3.2M views",
@@ -96,9 +105,10 @@ export const videos = [
     videoId: "SqcY0GlETPk",
     duration: "1:20:00",
     subscribers: "4.1M subscribers",
-    description: "Learn React basics, components, props, state, and hooks.",
+    description: "Learn React basics, components, props, state, and hooks."
   },
   {
+    id: "10",
     title: "JavaScript Tutorial for Beginners",
     channel: "Programming with Mosh",
     views: "8.5M views",
@@ -107,9 +117,10 @@ export const videos = [
     videoId: "W6NZfCO5SIk",
     duration: "48:17",
     subscribers: "4.1M subscribers",
-    description: "Beginner-friendly JavaScript tutorial.",
+    description: "Beginner-friendly JavaScript tutorial."
   },
   {
+    id: "11",
     title: "Git and GitHub Tutorial",
     channel: "freeCodeCamp.org",
     views: "6M views",
@@ -118,9 +129,10 @@ export const videos = [
     videoId: "RGOj5yH7evk",
     duration: "1:08:30",
     subscribers: "10M subscribers",
-    description: "Learn Git, GitHub, branches, commits, and collaboration.",
+    description: "Learn Git, GitHub, branches, commits, and collaboration."
   },
   {
+    id: "12",
     title: "Latest Technology Gadgets Review",
     channel: "Tech Review",
     views: "1.6M views",
@@ -129,6 +141,6 @@ export const videos = [
     videoId: "jNQXAC9IVRw",
     duration: "0:19",
     subscribers: "1.2M subscribers",
-    description: "A look at trending technology gadgets and devices.",
-  },
+    description: "A look at trending technology gadgets and devices."
+  }
 ];
